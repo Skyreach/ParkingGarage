@@ -16,6 +16,7 @@ class CreateVehicleRegistrationTable extends Migration
         Schema::create('vehicle_registration', function (Blueprint $table) {
             $table->increments('id');
             $table->unsignedInteger('owner_id');
+            $table->string('name');
             $table->string('license_plate');
             // $table->string('make');
             // $table->string('model');

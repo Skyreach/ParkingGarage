@@ -14,7 +14,10 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    Please add a vehicle to continue
+
+                    <!-- todo: convert to vue -->
+                    <a class="button is-link" href="/vehicles/create">Add a vehicle!</a>
                 </div>
             </div>
         </div>
