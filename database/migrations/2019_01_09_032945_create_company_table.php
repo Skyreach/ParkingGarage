@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateVehicleRegistrationTable extends Migration
+class CreateCompanyTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,15 +13,10 @@ class CreateVehicleRegistrationTable extends Migration
      */
     public function up()
     {
-        Schema::create('vehicle_registration', function (Blueprint $table) {
+        Schema::create('company', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('owner_id');
-            $table->string('license_plate');
-            // $table->string('make');
-            // $table->string('model');
-
-            $table->foreign('owner_id')->references('id')->on('users');
             $table->timestamps();
+            $table->string('name'); //getting lazy... address info, contact info, payments account, other..
         });
     }
 
@@ -32,6 +27,6 @@ class CreateVehicleRegistrationTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vehicle_registration');
+        Schema::dropIfExists('company');
     }
 }

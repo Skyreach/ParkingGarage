@@ -15,12 +15,18 @@ class CreateTicketsTable extends Migration
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('lot_id');
             $table->unsignedInteger('owner_id');
+            $table->unsignedInteger('location_id');
+            $table->dateTime('datetime_issued');    // consider renewals if paying in advance
+            $table->boolean('is_active')->default(true);
+            $table->boolean('is_paid')->default(false);
             $table->timestamps();
 
-            $table->foreign('lot_id')->references('id')->on('lots');
+        });
+        
+        Schema::table('tickets', function(Blueprint $table) {
             $table->foreign('owner_id')->references('id')->on('users');
+            $table->foreign('location_id')->references('id')->on('locations');
         });
     }
 
