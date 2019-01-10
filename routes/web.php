@@ -14,18 +14,19 @@
 Route::get('/', function () {
     return view('welcome');
 });
+Route::get('/welcome', function (){
+    return view('welcome');
+});
 
 Route::get('/vehicles', 'VehicleController@index');
 Route::get('/vehicles/create', 'VehicleController@create');
 Route::post('/vehicles', 'VehicleController@store');
 
 Route::get('/tickets', 'TicketController@index');
-Route::get('/tickets/{ticket}', 'TicketController@show');
-
-Route::post('/tickets', 'TicketController@store');
+Route::get('/ticket/{ticket}', 'TicketController@show');
+Route::post('/ticket', 'TicketController@store');
 
 Route::post('/payments/{ticket}', 'TicketPaymentsController@update');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');

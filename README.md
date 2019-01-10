@@ -4,7 +4,7 @@
 configure local mysql database
 run the following commads to get started
 
-> php artisan migrate
+> php artisan migrate --seed
 > npm install
 > npm run dev
 > php artisan serve

@@ -14,8 +14,10 @@ class VehicleController extends Controller
 
     public function index()
     {
-        $vehicles = auth()->user()->vehicles;
-        return view('vehicles.index', $vehicles);
+        $vehicles = auth()->user()->vehicle;
+        return view('vehicles.index', [
+            'vehicles' => $vehicles
+        ]);
     }
 
     public function create()
@@ -27,10 +29,12 @@ class VehicleController extends Controller
     {
         // $this->authorize('update', $vehicle);
         $attr = request()->validate([
-            'licence_plate' => ['required', 'min:2', 'max:8'],
+            'license_plate' => 'required|min:2|max:8',
+            'name' => 'required',
         ]);
         
         auth()->user()->vehicle()->create($attr);
+        return redirect('/vehicles');
     }
     
     //todo: edit, update, destroy

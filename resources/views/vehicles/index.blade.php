@@ -11,5 +11,5 @@
         @endforeach
     </ul>
     
-    <a class="button is-link" href="/projects/create">Add {{ $vehicles.any() ? 'another' : 'a' }} Vehicle</a>
+    <a class="button is-link" href="/projects/create">Add {{ $vehicles->count() ? 'another' : 'a' }} Vehicle</a>
 @endsection

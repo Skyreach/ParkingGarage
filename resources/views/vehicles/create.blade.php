@@ -6,10 +6,14 @@
     <form method="POST" action="/vehicles">
         {{ csrf_field() }}
         <div>
-            <input type="text" name="license" 
-                class="input {{ $errors->has('license') ? 'is-danger' : '' }}" 
-                placeholder="Enter your License Plate" required
-                value="{{ old('license') }}"/>
+            <input type="text" name="license_plate" 
+                class="input {{ $errors->has('license_plate') ? 'is-danger' : '' }}" 
+                placeholder="Enter your licence plate" required
+                value="{{ old('license_plate') }}"/>
+            <input type="text" name="name" 
+                class="input {{ $errors->has('name') ? 'is-danger' : '' }}" 
+                placeholder="Enter a name for your vehicle" required
+                value="{{ old('name') }}"/>
         </div>
         <div>
             <button type="submit" class="button is-link">Add Vehicle</button>
