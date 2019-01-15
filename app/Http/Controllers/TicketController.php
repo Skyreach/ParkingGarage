@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use App\Location;
 use App\Ticket;
 use App\Services\TicketService;
@@ -16,12 +17,12 @@ class TicketController extends Controller
 
     public function index()
     {
-        $vehicles = auth()->user()->vehicle;
+        $vehicle = auth()->user()->vehicle()->first();
         // $tickets = auth()->user()->ticket->where('isActive', true)->get();
-        $tickets = auth()->user()->ticket;
+        $tickets = auth()->user()->ticket()->where('is_active', 1)->get();
         
         return view('tickets.index', [
-            'vehicles' => $vehicles,
+            'vehicle' => $vehicle,
             'tickets' => $tickets,
         ]);
     }
@@ -30,11 +31,13 @@ class TicketController extends Controller
     {
         $location = Location::findOrFail(1);
         if ($location->occupancy > 0) {
-            // $ticket = auth()->user()->ticket()->create();
-            $ticket = Ticket::create();
+            // todo: consider introducing polymorphic relationship
+            $ticket = new Ticket;
+            $ticket->user()->associate(Auth::user());
+            $ticket->location()->associate($location);
 
-            $location->ticket()->save($ticket);
-            auth()->user()->ticket()->save($ticket);
+            $ticket->save();
+
             return view('tickets.index', [
                 'tickets' => $ticket,
             ]);

@@ -12,19 +12,20 @@
                     @else
                         @foreach($tickets as $ticket)
                             <div class="card-body">
-                                
+                                <p>Issued: {{ $ticket->datetime_issued }}</p>
+                                <a href="/ticket/{{$ticket->id}}" class="button is-link"> View Ticket Details </a>
                             </div>
                         @endforeach
                     @endif
                 </div>
             </div>
                 <div style="margin-top:5vh;">
-                    @if($vehicles->count() == 0)
-                        To continue please 
+                    @if(!isset($vehicle))
+                        <p>To continue please</p>
 
                         <!-- todo: convert to vue -->
                         <a class="button is-link" href="/vehicles/create">Add a vehicle!</a>
-                    @else ($vehicles->count() == 1)
+                    @elseif(!isset($tickets))
                         <form method="POST" action="/ticket">
                             @csrf
                             <input type="submit" class="button is-link" value="Enter Garage">

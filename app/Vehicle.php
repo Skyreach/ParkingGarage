@@ -10,4 +10,8 @@ class Vehicle extends Model
         'license_plate',
         'name',
     ];
+
+    public function user() {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }
