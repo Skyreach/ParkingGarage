@@ -1,0 +1,19 @@
+﻿@model ParkingGarage.Models.Ticket
+
+<h2>View To-Do Item Details</h2>
+<div>
+    <h4>Item</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeIssued)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.AmountOwing)
+        </dd>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Pay Balance", "Pay", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
