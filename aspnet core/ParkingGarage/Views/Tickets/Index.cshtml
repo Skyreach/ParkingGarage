@@ -1,0 +1,47 @@
+﻿@model IEnumerable<ParkingGarage.Models.Ticket>
+
+@{
+    ViewBag.Title = "List of tickets";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Tickets</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.LicensePlate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TimeIssued)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsActive)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var ticket in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => ticket.LicensePlate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => ticket.TimeIssued)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => ticket.IsActive)
+        </td>
+        <td>
+            @Html.ActionLink("Pay", "Pay", new { id=ticket.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=ticket.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=ticket.Id })
+        </td>
+    </tr>
+}
+
+</table>
+
+<p>
+    @Html.ActionLink("Enter Garage", "Create")
+</p>
