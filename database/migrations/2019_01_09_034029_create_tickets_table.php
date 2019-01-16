@@ -17,7 +17,7 @@ class CreateTicketsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('owner_id');
             $table->unsignedInteger('location_id');
-            $table->dateTime('datetime_issued');    // consider renewals if paying in advance
+            $table->dateTime('datetime_issued')->default(DB::raw('now()'));    // consider renewals if paying in advance
             $table->boolean('is_active')->default(true);
             $table->boolean('is_paid')->default(false);
             $table->timestamps();
@@ -37,6 +37,6 @@ class CreateTicketsTable extends Migration
      */
     public function down()
     {
-        // Schema::dropIfExists('tickets');
+        Schema::dropIfExists('tickets');
     }
 }

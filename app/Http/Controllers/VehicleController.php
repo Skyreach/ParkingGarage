@@ -16,7 +16,7 @@ class VehicleController extends Controller
     {
         $vehicles = auth()->user()->vehicle;
         return view('vehicles.index', [
-            'vehicles' => $vehicles
+            'vehicle' => $vehicle
         ]);
     }
 
@@ -34,7 +34,7 @@ class VehicleController extends Controller
         ]);
         
         auth()->user()->vehicle()->create($attr);
-        return redirect('/vehicles');
+        return redirect('/tickets');
     }
     
     //todo: edit, update, destroy

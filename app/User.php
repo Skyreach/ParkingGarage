@@ -29,7 +29,7 @@ class User extends Authenticatable
     ];
 
     public function vehicle() {
-        return $this->hasmany(Vehicle::class, 'owner_id');
+        return $this->hasOne(Vehicle::class, 'owner_id');
     }
 
     public function ticket() {
