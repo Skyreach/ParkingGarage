@@ -4,30 +4,43 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using ParkingGarage.Models;
+using ParkingGarage.Services;
 
 namespace ParkingGarage.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/payments")]
     [ApiController]
     public class TicketPaymentsController : ControllerBase
     {
-        // GET: api/TicketPayments
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
+        private readonly IPaymentService _paymentService;
+        private readonly ITicketService _ticketService;
+        
+        public TicketPaymentsController(IPaymentService paymentService, ITicketService ticketService) {
+            _paymentService = paymentService;
+            _ticketService = ticketService;
         }
 
-        // POST: api/TicketPayments
         [HttpPost]
-        public void Post([FromBody] string value)
+        [Route("{ticketId}")]
+        public async Task<string> Post(string ticketId, [FromBody] string creditNumber)
         {
-        }
+            if (!_paymentService.IsValidCard(creditNumber)) {
+                return "Failed to pay for ticket";
+            }
 
-        // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            Ticket ticket = null;
+            if (ModelState.IsValid) {
+                var ticketResult = await _ticketService.GetAsync(ticketId);
+
+                if (ticketResult != null) {
+                    ticket = await _paymentService.PayTicket(ticketResult);
+                } else {
+                    return "Failed to pay for ticket, no tickets found!";
+                }
+            }
+
+            return $"Ticket {ticket.Id} has been paid with credit card {creditNumber} for amount ${ticket.AmountOwing.ToString("F2")}";
         }
     }
 }

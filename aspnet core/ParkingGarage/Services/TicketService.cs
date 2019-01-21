@@ -37,12 +37,28 @@ namespace ParkingGarage.Services {
             return _cosmosDBRepository.CreateItemAsync(ticket);
         }
 
+        public Task<Document> Update(Ticket ticket) {
+            return _cosmosDBRepository.UpdateItemAsync(ticket.Id.ToString(), ticket);
+        }
+
         public Task<IEnumerable<Ticket>> GetAsync(bool isActive = true) {
             return _cosmosDBRepository.GetItemsAsync(ticket => ticket.IsActive == isActive);
         }
 
+        public Task<IEnumerable<Ticket>> GetAll() {
+            return _cosmosDBRepository.GetItemsAsync(ticket => ticket.Id != new Guid().ToString());
+        }
+
         public async Task<Ticket> GetAsync(string id, bool isActive = true) {
             var ticket = await _cosmosDBRepository.GetItemAsync(id);
+            ticket.AmountOwing = GetAmountOwing(ticket);
+
+            return ticket;
+        }
+
+        public async Task<Ticket> GetExistingAsync(string licensePlate) {
+            var ticketResult = await _cosmosDBRepository.GetItemsAsync(doc => doc.LicensePlate == licensePlate && doc.IsActive);
+            var ticket = ticketResult.FirstOrDefault();
             ticket.AmountOwing = GetAmountOwing(ticket);
 
             return ticket;
