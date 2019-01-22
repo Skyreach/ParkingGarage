@@ -9,7 +9,7 @@ using ParkingGarage.Services;
 
 namespace ParkingGarage.Controllers
 {
-    [Route("api/payments")]
+    [Route("payments")]
     [ApiController]
     public class TicketPaymentsController : ControllerBase
     {

@@ -10,7 +10,7 @@ using ParkingGarage.Repositories;
 using ParkingGarage.Services;
 
 namespace ParkingGarage.Controllers {
-    [Route("api/ticket")]
+    [Route("ticket")]
     [ApiController]
     public class TicketsController : Controller {
         private readonly ILocationService _locationService;
@@ -27,12 +27,12 @@ namespace ParkingGarage.Controllers {
             return DateTime.Now.ToString();
         }
 
-        // GET: api/Tickets
+        // GET: tickets
         /// <summary>
-        /// 
+        /// Retrieves all active tickets
         /// </summary>
         /// <todo>Change result type from IEnumerable<Ticket> to ActionResult</todo>
-        /// <returns></returns>
+        /// <returns>All active tickets</returns>
         [HttpGet]
         [ActionName("Index")]
         [Route("")]
@@ -44,9 +44,9 @@ namespace ParkingGarage.Controllers {
             return sortedTickets;
         }
 
-        // GET: api/Tickets/5
+        // GET: ticket/5
         /// <summary>
-        /// 
+        /// Retrieves a ticket by it's Id
         /// </summary>
         /// <param name="id"></param>
         /// <todo>Change result type from Ticket to ActionResult</todo>
@@ -56,13 +56,14 @@ namespace ParkingGarage.Controllers {
             return await _ticketService.GetAsync(id);
         }
 
-        // POST: api/Tickets
+        // POST: ticket
         /// <summary>
-        /// 
+        /// Issues a new ticket if occupancy is available, will re-issue the same ticket if the license
+        /// already exists as an active ticket
         /// </summary>
         /// <todo>Change result type from Ticket to ActionResult</todo>
-        /// <param name="licensePlate"></param>
-        /// <returns></returns>
+        /// <param name="licensePlate">License Plate of the Vehicle to Register</param>
+        /// <returns>The generated or retrieved ticket</returns>
         [HttpPost]
         [Route("")]
         public async Task<Ticket> Post([FromBody] string licensePlate = "No vehicle association") {
@@ -81,6 +82,7 @@ namespace ParkingGarage.Controllers {
             if (ModelState.IsValid && hasOccupancy) {
                 var baseTicket = new Ticket() {
                     LicensePlate = licensePlate,
+                    TimeIssued = DateTime.Now,
 
                     /*Todo: Ensure that the customer pays what they're expecting when they receive the ticket 
                      * Currently retrieved from location service and not from ticket values */
