@@ -33,11 +33,18 @@ namespace ParkingGarage {
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            /* Consider swagger
+            //Register Swagger generator
+            services.AddSwaggerGen(options => {
+                options.SwaggerDoc("v1", new Swashbuckle.AspNetCore.Swagger.Info { Title = "Parking Garage API", Version = "v1" });
+            }); */
+
             services.Configure<LocationSettings>(Configuration.GetSection("Location"));
             services.Configure<CosmosSettings>(Configuration.GetSection("CosmosDB"));
 
             services.AddScoped<ITicketService, TicketService>();
             services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IPaymentService, PaymentService> ();
             services.AddScoped<ICosmosDBRepository<Ticket>, CosmosDBRepository<Ticket>>();
         }
 
@@ -53,6 +60,19 @@ namespace ParkingGarage {
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            /* Consider swagger
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Parking Garage V1");
+                c.RoutePrefix = string.Empty;
+            });
+            */
 
             app.UseMvc(routes => {
                 routes.MapRoute(

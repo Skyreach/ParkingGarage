@@ -11,9 +11,14 @@ namespace ParkingGarage.Services {
 
         Task<IEnumerable<Ticket>> GetAsync(bool isActive = true);
 
+        Task<IEnumerable<Ticket>> GetAll();
+
         Task<Ticket> GetAsync(string id, bool isActive = true);
 
         Task<Document> Create(Ticket ticket);
 
+        Task<Document> Update(Ticket ticket);
+
+        Task<Ticket> GetExistingAsync(string licensePlate);
     }
 }
