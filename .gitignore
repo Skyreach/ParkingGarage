@@ -12,4 +12,5 @@ yarn-error.log
 
 aspnet core/\.vs/*
 
-aspnet core/ParkingGarage\.Tests/*
+aspnet core/ParkingGarage\.Tests/bin
+aspnet core/ParkingGarage\.Tests/obj
