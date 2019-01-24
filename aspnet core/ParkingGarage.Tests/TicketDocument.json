@@ -1,0 +1,21 @@
+﻿{
+  "timeIssued": "2019-01-19T17:58:25.5286498-05:00",
+  "licensePlate": "123457",
+  "rate": 3,
+  "isActive": true,
+  "intervals": [
+    60,
+    180,
+    360,
+    1440
+  ],
+  "increasePercentage": 1.5,
+  "AmountOwing": 0,
+  "id": "85ac4861-e31c-4ea9-b042-c7618defc9a4",
+  "createdAt": "2019-01-19T22:58:25.5285272Z",
+  "_rid": "-kwCAIK8BYwGAAAAAAAAAA==",
+  "_self": "dbs/-kwCAA==/colls/-kwCAIK8BYw=/docs/-kwCAIK8BYwGAAAAAAAAAA==/",
+  "_etag": "\"00000000-0000-0000-b04a-7c08cddb01d4\"",
+  "_attachments": "attachments/",
+  "_ts": 1547938705
+}
