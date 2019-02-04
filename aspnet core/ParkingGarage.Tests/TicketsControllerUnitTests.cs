@@ -25,10 +25,10 @@ namespace ParkingGarage.Tests {
 
         private LocationSettings LocationSettings 
             => new LocationSettings() {
-                BaseRate = "3.00",
-                Occupancy = "50",
+                BaseRate = 3.00,
+                Occupancy = 50,
                 RateDurations = "60,180,360,1440",
-                RateIncreasePercent = "1.50",
+                RateIncreasePercent = 1.50,
             };
 
         [Fact]
@@ -249,10 +249,10 @@ namespace ParkingGarage.Tests {
             var cosmosDBRepositoryMock = new Mock<ICosmosDBRepository<Ticket>>(MockBehavior.Strict);
 
             var locationSettings = new LocationSettings() {
-                BaseRate = "3.00",
-                Occupancy = "0",
+                BaseRate = 3.00,
+                Occupancy = 0,
                 RateDurations = "60,180,360,1440",
-                RateIncreasePercent = "1.50",
+                RateIncreasePercent = 1.50,
             };
 
             var locationService = new LocationService(Options.Create(locationSettings));
@@ -278,7 +278,61 @@ namespace ParkingGarage.Tests {
             ticketsContainer.Should().HaveCount(0);
             cosmosDBRepositoryMock.Verify(x => x.CreateItemAsync(It.IsAny<Ticket>()), Times.Never);
         }
-        
+
+        [Fact]
+        public async Task Ticket_Controller_Lot_Should_Have_Finite_Occupation() {
+
+            var cosmosDBRepositoryMock = new Mock<ICosmosDBRepository<Ticket>>(MockBehavior.Strict);
+
+            var occupancy = 10;
+
+            var locationSettings = new LocationSettings() {
+                BaseRate = 3.00,
+                Occupancy = occupancy,
+                RateDurations = "60,180,360,1440",
+                RateIncreasePercent = 1.50,
+            };
+
+            var locationService = new LocationService(Options.Create(locationSettings));
+            var ticketService = new TicketService(cosmosDBRepositoryMock.Object, locationService);
+
+            var ticketsContainer = new List<Ticket>();
+
+            cosmosDBRepositoryMock.Setup(x => x.CreateItemAsync(It.IsAny<Ticket>()))
+                .Returns<Ticket>(ticket => {
+                    var doc = new Document();
+                    var castTicket = JsonConvert.SerializeObject(ticket);
+
+                    doc.LoadFrom(new JsonTextReader(new StreamReader(new MemoryStream(Encoding.ASCII.GetBytes(castTicket)))));
+
+                    ticketsContainer.Add(doc.ToObject<Ticket>());
+                    return Task.FromResult(doc);
+                });
+
+            cosmosDBRepositoryMock.Setup(x => x.GetItemsAsync(It.IsAny<Expression<Func<Ticket, bool>>>()))
+                .Returns((Expression<Func<Ticket, bool>> predicate) => {
+                    return Task.FromResult(
+                        ticketsContainer
+                            .AsQueryable()
+                            .Where(predicate)
+                            .ToList()
+                            .Cast<Ticket>());
+                });
+
+            var controller = new TicketsController(locationService, ticketService);
+
+            var licensePlate = "123 456";
+
+            for (int i = 0; i < occupancy; i++) {
+                await controller.Post(licensePlate + i);
+            }
+
+            await controller.Post(licensePlate);  // Should fail as lot should be full
+
+            ticketsContainer.Should().HaveCount(occupancy);
+            cosmosDBRepositoryMock.Verify(x => x.CreateItemAsync(It.IsAny<Ticket>()), Times.Exactly(occupancy));
+        }
+
         private static string GetFilePath(string fileName) {
             return Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), $"../../../{fileName}.json");
         }

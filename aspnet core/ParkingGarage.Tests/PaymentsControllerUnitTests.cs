@@ -23,10 +23,10 @@ namespace ParkingGarage.Tests {
 
         private LocationSettings LocationSettings
             => new LocationSettings() {
-                BaseRate = "3.00",
-                Occupancy = "50",
+                BaseRate = 3.00,
+                Occupancy = 50,
                 RateDurations = "60,180,360,1440",
-                RateIncreasePercent = "1.50",
+                RateIncreasePercent = 1.50,
             };
 
         [Fact]

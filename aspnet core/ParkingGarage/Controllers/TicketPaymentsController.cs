@@ -35,12 +35,11 @@ namespace ParkingGarage.Controllers
 
                 if (ticketResult != null) {
                     ticket = await _paymentService.PayTicket(ticketResult);
-                } else {
-                    return "Failed to pay for ticket, no tickets found!";
+                    return $"Ticket {ticket.Id} has been paid with credit card {creditNumber} for amount ${ticket.AmountOwing.ToString("F2")}";
                 }
             }
 
-            return $"Ticket {ticket.Id} has been paid with credit card {creditNumber} for amount ${ticket.AmountOwing.ToString("F2")}";
+            return "Failed to pay for ticket, no tickets found!";
         }
     }
 }
