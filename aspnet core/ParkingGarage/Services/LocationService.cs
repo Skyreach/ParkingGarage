@@ -16,7 +16,7 @@ namespace ParkingGarage.Services {
 
         public LocationService(IOptions<LocationSettings> locationSettings) {
             _locationSettings = locationSettings.Value;
-            _occupancy = int.Parse(_locationSettings.Occupancy);
+            _occupancy = _locationSettings.Occupancy;
         }
 
         public int[] GetIntervalDurations() {
@@ -24,11 +24,11 @@ namespace ParkingGarage.Services {
         }
 
         public double GetRate() {
-            return double.Parse(_locationSettings.BaseRate);
+            return _locationSettings.BaseRate;
         }
 
         public double GetRateIncreasePercentage() {
-            return double.Parse(_locationSettings.RateIncreasePercent);
+            return _locationSettings.RateIncreasePercent;
         }
 
         public int GetOccupancy() {

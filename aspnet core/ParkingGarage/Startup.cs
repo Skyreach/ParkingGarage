@@ -43,7 +43,7 @@ namespace ParkingGarage {
             services.Configure<CosmosSettings>(Configuration.GetSection("CosmosDB"));
 
             services.AddScoped<ITicketService, TicketService>();
-            services.AddScoped<ILocationService, LocationService>();
+            services.AddSingleton<ILocationService, LocationService>();
             services.AddScoped<IPaymentService, PaymentService> ();
             services.AddScoped<ICosmosDBRepository<Ticket>, CosmosDBRepository<Ticket>>();
         }

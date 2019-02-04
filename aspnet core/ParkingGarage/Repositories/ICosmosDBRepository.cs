@@ -18,6 +18,6 @@ namespace ParkingGarage.Repositories {
 
         Task DeleteItemAsync(string id);
 
-        void Initialize();
+        Task Initialize();
     }
 }

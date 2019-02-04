@@ -30,7 +30,10 @@ namespace ParkingGarage.Repositories {
 
         public async Task<T> GetItemAsync(string id) {
             try {
-                Document document = await client.ReadDocumentAsync(UriFactory.CreateDocumentUri(_databaseId, _collectionId, id));
+                Document document = await client.ReadDocumentAsync(
+                    UriFactory.CreateDocumentUri(_databaseId, _collectionId, id),
+                    new RequestOptions { PartitionKey = new PartitionKey("Parking Garage") }
+                );
                 return (T)(dynamic)document;
             } catch (DocumentClientException e) {
                 if (e.StatusCode == System.Net.HttpStatusCode.NotFound) {
@@ -57,21 +60,31 @@ namespace ParkingGarage.Repositories {
         }
 
         public async Task<Document> CreateItemAsync(T item) {
-            return await client.CreateDocumentAsync(UriFactory.CreateDocumentCollectionUri(_databaseId, _collectionId), item);
+            return await client.CreateDocumentAsync(
+                UriFactory.CreateDocumentCollectionUri(_databaseId, _collectionId),
+                item,
+                new RequestOptions { PartitionKey = new PartitionKey("Parking Garage") }
+            );
         }
 
         public async Task<Document> UpdateItemAsync(string id, T item) {
-            return await client.ReplaceDocumentAsync(UriFactory.CreateDocumentUri(_databaseId, _collectionId, id), item);
+            return await client.ReplaceDocumentAsync(
+                UriFactory.CreateDocumentUri(_databaseId, _collectionId, id),
+                item,
+                new RequestOptions { PartitionKey = new PartitionKey("Parking Garage") });
         }
 
         public async Task DeleteItemAsync(string id) {
-            await client.DeleteDocumentAsync(UriFactory.CreateDocumentUri(_databaseId, _collectionId, id));
+            await client.DeleteDocumentAsync(
+                UriFactory.CreateDocumentUri(_databaseId, _collectionId, id),
+                new RequestOptions { PartitionKey = new PartitionKey("Parking Garage") }
+            );
         }
 
-        public void Initialize() {
+        public async Task Initialize() {
             client = new DocumentClient(new Uri(_endpoint), _key);
-            CreateDatabaseIfNotExistsAsync().Wait();
-            CreateCollectionIfNotExistsAsync().Wait();
+            await CreateDatabaseIfNotExistsAsync();
+            await CreateCollectionIfNotExistsAsync();
         }
 
         private async Task CreateDatabaseIfNotExistsAsync() {

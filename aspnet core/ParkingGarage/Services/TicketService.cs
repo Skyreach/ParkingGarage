@@ -51,6 +51,8 @@ namespace ParkingGarage.Services {
 
         public async Task<Ticket> GetAsync(string id, bool isActive = true) {
             var ticket = await _cosmosDBRepository.GetItemAsync(id);
+            if (ticket == null) return null;
+
             ticket.AmountOwing = GetAmountOwing(ticket);
 
             return ticket;

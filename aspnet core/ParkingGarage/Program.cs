@@ -10,12 +10,13 @@ using Microsoft.Extensions.Logging;
 
 namespace ParkingGarage {
     public class Program {
-        public static void Main(string[] args) {
-            CreateWebHostBuilder(args).Build().Run();
+        public static async Task Main(string[] args) {
+            await CreateWebHostBuilder(args).RunAsync();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHost CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseStartup<Startup>();
+                .UseStartup<Startup>()
+                .Build();
     }
 }
